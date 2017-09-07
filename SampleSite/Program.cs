@@ -7,6 +7,7 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using FileProviders.Zip;
 
 namespace SampleSite
 {
@@ -20,6 +21,10 @@ namespace SampleSite
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
+                .ConfigureAppConfiguration((hostContext, configBuilder) =>
+                {
+                    hostContext.HostingEnvironment.WebRootFileProvider = new ZipFileProvider(Path.Combine(hostContext.HostingEnvironment.WebRootPath, "static.zip"));
+                })
                 .Build();
     }
 }
